@@ -27,10 +27,10 @@
             var p = $("<p>").text("Rating: " + rating);
 
             var Image = $("<img>");
-            personImage.attr("src", results[i].images.fixed_height.url);
+            movieImage.attr("src", results[i].images.fixed_height.url);
 
             gifDiv.prepend(p);
-            gifDiv.prepend(personImage);
+            gifDiv.prepend(movieImage);
 
             $("#gifs-appear-here").prepend(gifDiv);
           }
