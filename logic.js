@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
   // Initial array of movies
-  var movies = ["Cool Runnings", "The Godfather", "Mean Girls", "Fifth Element", "Hitch", "Home Alone", "Pitch Perfect", "Taken", "The Devil Wears Prada"];
+  var movies = ["Cool-Runnings", "The-Godfather", "Mean-Girls", "Fifth-Element", "Hitch", "Home-Alone", "Pitch-Perfect", "Taken", "The-Devil-Wears-Prada"];
 
   renderButtons();
 
@@ -18,7 +18,7 @@ $(document).ready(function(){
 }
 
   // This function handles events where the add movie button is clicked
-  $("#buttons-view").on("click", function(event) {
+  $(document).on('click', '.btn', function(event) {
     event.preventDefault();
     // This line of code will grab the input from the textbox
     var movieFromButton = $(this).text();
@@ -48,7 +48,7 @@ $(document).ready(function(){
         gifArea.empty();
 
         $.each(array, function(i, val) {
-            gifArea.append($('<div>').append($('<div>').text("Rating: " + val.rating))
+            gifArea.append($('<div style="display:inline-block; margin:10px">').append($('<div>').text("Rating: " + val.rating))
                 .append($('<img>')
                 .attr('src', val.images.fixed_height_small_still.url)
                 .attr('data-still', val.images.fixed_height_small_still.url)
@@ -60,9 +60,8 @@ $(document).ready(function(){
 
     // queries the API with the subject
     // and calls populatesGifs array
-    function getGifs(movies) {
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-            movies[i] + "&api_key=dc6zaTOxFJmzC&limit=10";
+    function getGifs(movieFromButton) {
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + movieFromButton + "&api_key=dc6zaTOxFJmzC&limit=10";
 
         console.log(queryURL);
 
