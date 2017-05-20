@@ -7,6 +7,21 @@
   <!-- Bootstrap File -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+  <style>
+    button.movie {
+      background-color: white;
+      color: black;
+      border: 2px solid #4CAF50; /* Green */
+      border-radius: 4px;
+      padding: 5px;
+      margin: 5px;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    } 
+    button.movie:hover {
+      background-color: #4CAF50; /* Green */
+      color: white;
+    }
+  </style>
 </head>
 
 
@@ -19,7 +34,7 @@
 
     <!-- Rendered buttons will get dumped here  -->
     <div style="text-align: center" id="buttons-view"></div>
-	<br>
+    <br>
     <form style="text-align: center" id="movie-form">
       <label for="movie-input">Add a Movie:</label>
       <input type="text" id="movie-input"><br>
