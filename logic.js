@@ -62,7 +62,7 @@ $(document).ready(function(){
     // and calls populatesGifs array
     function getGifs(movies) {
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-            movies + "&api_key=dc6zaTOxFJmzC&limit=10";
+            movies[i] + "&api_key=dc6zaTOxFJmzC&limit=10";
 
         console.log(queryURL);
 
@@ -89,9 +89,10 @@ $(document).ready(function(){
     // reload array in html
     $('.btn-info').on('click', function() {
         event.preventDefault();
-        console.log($('#add-movie').val());
-        movies.push($('#add-movie').val());
+        console.log($('#movie-input').val());
+        movies.push($('#movie-input').val());
         renderButtons();
+        $('#movie-input').val(" ");
 
     });
 
