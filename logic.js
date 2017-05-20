@@ -1,94 +1,99 @@
-    // Initial array of movies
-    var movies = ["The Matrix", "Cool Runnings", "The Godfather", "Mean Girls", "Fifth Element", "Hitch", "Home Alone", "Pitch Perfect", "Taken", "The Devil Wears Prada"];
+$(document).ready(function(){
 
-     
-    // displayMovieInfo function re-renders the HTML to display the appropriate content
-    function displayMovieGif() {
+  // Initial array of movies
+  var movies = ["Cool Runnings", "The Godfather", "Mean Girls", "Fifth Element", "Hitch", "Home Alone", "Pitch Perfect", "Taken", "The Devil Wears Prada"];
 
-    // Example queryURL for Giphy API
-    //button clicks generating 10 gifs depending on search
-      $("button").on("click", function() {
-        var movie = $(this).attr("data-name");
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=hitch&api_key=dc6zaTOxFJmzC&limit=10";
+  renderButtons();
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-          })
-          .done(function(response) {
-            var results = response.data;
+  //Loops through movies array and appends buttons to HTML
+  // Function for displaying movie data
+  function renderButtons() {
+    // Deletes the movies prior to adding new movies (this is necessary otherwise you will have repeat buttons)
+    $("#buttons-view").empty();
+    // Loops through the array of movies
+    $.each(movies, function(i, val) {
+        var movieButton = $('<button>').attr('class', 'btn').addClass('movie').text(val);
+        $("#buttons-view").append(movieButton);
+    });
+}
 
-            for (var i = 0; i < results.length; i++) {
-              var gifDiv = $("<div class='item'>");
+  // This function handles events where the add movie button is clicked
+  $("#buttons-view").on("click", function(event) {
+    event.preventDefault();
+    // This line of code will grab the input from the textbox
+    var movieFromButton = $(this).text();
+    getGifs(movieFromButton);
+    
+  });
 
-              var rating = results[i].rating;
+  $(document).on('click', '.gif-image', function() {
+        var stateAttr = $(this).attr('data-state');
 
-              var p = $("<p>").text("Rating: " + rating);
+        if (stateAttr === "still") {
+            $(this).attr('src', $(this).attr('data-animate'));
+            $(this).attr('data-state', 'animate');
+        } else {
+            $(this).attr('src', $(this).attr('data-still'));
+            $(this).attr('data-state', 'still');
+        }
+    });
+    
+    // takes an array of gif objects
+    // and creates elements in the HTML in gif-area
+    function populateGifs(array) {
+        console.log('populateGifs');
+        console.log(array);
 
-              var Image = $("<img>");
-              movieImage.attr("src", results[i].images.fixed_height.url);
+        var gifArea = $('#gifs-appear-here');
+        gifArea.empty();
 
-              gifDiv.prepend(p);
-              gifDiv.prepend(movieImage);
-
-              $("#gifs-appear-here").prepend(gifDiv);
-            }
-          });
-      });
-
+        $.each(array, function(i, val) {
+            gifArea.append($('<div>').append($('<div>').text("Rating: " + val.rating))
+                .append($('<img>')
+                .attr('src', val.images.fixed_height_small_still.url)
+                .attr('data-still', val.images.fixed_height_small_still.url)
+                .attr('data-animate', val.images.fixed_height_small.url)
+                .attr('data-state', 'still')
+                .addClass('gif-image')));
+        });
     }
 
-      // Function for displaying movie data
-      function renderButtons() {
-        // Deletes the movies prior to adding new movies (this is necessary otherwise you will have repeat buttons)
-        $("#buttons-view").empty();
-        // Loops through the array of movies
-        for (var i = 0; i < movies.length; i++) {
-          // Then dynamicaly generates buttons for each movie in the array
-          // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-          var a = $("<button>");
+    // queries the API with the subject
+    // and calls populatesGifs array
+    function getGifs(movies) {
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            movies + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-          // Adds a class of movie to our button
-          a.addClass("movie");
-          // Added a data-attribute
-          a.attr("data-name", movies[i]);
-          // Provided the initial button text
-          a.text(movies[i]);
-          // Added the button to the buttons-view div
-          $("#buttons-view").append(a);
-        }
-      }
+        console.log(queryURL);
 
-      // This function handles events where the add movie button is clicked
-      $("#add-movie").on("click", function(event) {
+        $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+            .done(function(response) {
+
+                var gifArray = [];
+
+                $.each(response.data, function(i, val) {
+
+                    gifArray = response.data;
+                });
+
+                populateGifs(gifArray);
+
+            });
+    }
+
+    // whenever submit button is clicked
+    // add button to array
+    // reload array in html
+    $('.btn-info').on('click', function() {
         event.preventDefault();
-        // This line of code will grab the input from the textbox
-        var movie = $("#movie-input").val().trim();
-
-        // The movie from the textbox is then added to our array
-        movies.push(movie);
-
-        // Calling renderButtons which handles the processing of our movie array
+        console.log($('#add-movie').val());
+        movies.push($('#add-movie').val());
         renderButtons();
-      });
 
-      // Adding click event listeners to all elements with a class of "movie"
-      $(document).on("click", ".movie", displayMovieGif);
-
-      // Calling the renderButtons function to display the intial buttons
-      renderButtons();
-
-//on button click logic below for pausing and playing gifs
-	$(".gif").on("click", function() {
-      
-      var state = $(this).attr("data-state");
-
-      if (state === "still"){
-        $(this).attr("src",$(this).attr("data-animate"));
-        $(this).attr("data-state", "animate");
-      }
-      else {
-        $(this).attr("src",$(this).attr("data-still"));
-        $(this).attr("data-state", "still");
-      }
     });
+
+
+}); //closed document ready function
