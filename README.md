@@ -1,2 +1,2 @@
 # GifTastic
-HW6 - Giftastic
+Giftastic generates gifs based on user's input of various topics.
